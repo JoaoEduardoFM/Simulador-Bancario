@@ -46,4 +46,4 @@
 
 - Em desenvolvimento ⚠️
 1) Adicionar validation.
-2) Lapida código.
+2) Lapidar código.
