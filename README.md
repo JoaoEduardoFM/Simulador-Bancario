@@ -8,11 +8,12 @@
 
 ## Alguns campos no modelo principal são:
 
-+ inst 
-+ agen
++ nrInst 
++ nrAgen
 + cdCta
 + nome
-+ cpfCnpj
++ email
++ cpf
 + saldo
 
 ## Technologies Used:
@@ -27,15 +28,22 @@
   </tr>
   <tr>
     <td>11</td>
-    <td>2.7.3</td>
+    <td>2.5.3</td>
     <td>h2</td>
   </tr>
 </table>
 
 ## Desenvolvimento concluído.
 
-1) iniciando projeto.
+1) Cadastra registro.
+2) Edita registro cadastrado.
+3) Busca registro pelo ID.
+4) Efetua saque.
+5) Efetua deposito.
+6) Efetua transferencia entre contas.
 
 ## ## Esses recursos estão em desenvolvimento:
 
 - Em desenvolvimento ⚠️
+1) Adicionar validation.
+2) Lapida código.
