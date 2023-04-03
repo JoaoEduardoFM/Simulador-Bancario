@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "5e90ae85-68d3-459b-a237-e5de0b543131",
+		"_postman_id": "2861cb7c-7422-40a6-8722-7fd9024103fb",
 		"name": "ApiBancaria",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18622684"
+		"_exporter_id": "18145798"
 	},
 	"item": [
 		{
@@ -78,15 +78,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/cliente/saque/1",
+					"raw": "http://localhost:8080/sacar/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"cliente",
-						"saque",
+						"sacar",
 						"1"
 					]
 				}
@@ -108,15 +107,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/cliente/deposita/1",
+					"raw": "http://localhost:8080/deposito/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"cliente",
-						"deposita",
+						"deposito",
 						"1"
 					]
 				}
@@ -130,7 +128,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \r\n    \"saldo\": 200.00,\r\n    \"favorecido\": 3\r\n}",
+					"raw": "{ \r\n    \"saldo\": 200.00,\r\n    \"favorecido\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

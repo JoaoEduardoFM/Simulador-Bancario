@@ -52,8 +52,84 @@ public class Cliente implements Serializable {
 
 	@Column(name = "saldo")
 	private BigDecimal saldo;
-	
+
 	@Column(name = "favorecido")
 	private Long favorecido;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getNrInst() {
+		return nrInst;
+	}
+
+	public void setNrInst(Long nrInst) {
+		this.nrInst = nrInst;
+	}
+
+	public Long getNrAgen() {
+		return nrAgen;
+	}
+
+	public void setNrAgen(Long nrAgen) {
+		this.nrAgen = nrAgen;
+	}
+
+	public Long getCdCta() {
+		return cdCta;
+	}
+
+	public void setCdCta(Long cdCta) {
+		this.cdCta = cdCta;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public BigDecimal getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(BigDecimal saldo) {
+		this.saldo = saldo;
+	}
+
+	public Long getFavorecido() {
+		return favorecido;
+	}
+
+	public void setFavorecido(Long favorecido) {
+		this.favorecido = favorecido;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 }

@@ -10,9 +10,25 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseRest {
 
-	String message;
+	String message;	
 
 	private messageType type;
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public messageType getType() {
+		return type;
+	}
+
+	public void setType(messageType type) {
+		this.type = type;
+	}
 
 	public enum messageType {
 		
@@ -35,6 +51,12 @@ public class ResponseRest {
 		public String getDescription() {
 			return description;
 		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+		
+		
 	}
 
 }
