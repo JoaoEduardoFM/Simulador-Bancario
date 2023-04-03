@@ -1,15 +1,23 @@
 package br.com.controller;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.entity.Cliente;
@@ -25,7 +33,7 @@ public class SaqueController {
     private ClienteService clienteService;
 	
 	@PatchMapping("{id}")
-	public ResponseEntity<ResponseRest> sacaValor(@PathVariable("id") Long id, @RequestBody Cliente cliente,
+	public ResponseEntity<ResponseRest> sacaValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente,
 			ResponseRest response) {
     	
     	if(verificaSaldo(id).compareTo(cliente.getSaldo()) < 0) { 
@@ -61,5 +69,19 @@ public class SaqueController {
     	cliente.setSaldo(saldo);
         return clienteService.salvar(cliente);
 	}
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Object> MethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+		ResponseRest response = new ResponseRest();
+		List<String> erros = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage)
+				.collect(Collectors.toList());	
+		
+		for (String listaErro : erros) {
+			response.setMessage(listaErro);
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 }

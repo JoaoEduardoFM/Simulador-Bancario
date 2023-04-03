@@ -1,12 +1,18 @@
 package br.com.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +30,7 @@ import br.com.service.ClienteService;
 
 @RestController
 @RequestMapping("/cliente")
-public class ClienteController {
+public class ClienteController{
 
     @Autowired
     private ClienteService clienteService;
@@ -34,7 +40,7 @@ public class ClienteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ResponseRest> salvar(@RequestBody Cliente cliente, ResponseRest response){
+    public ResponseEntity<ResponseRest> salvar(@RequestBody @Valid Cliente cliente, ResponseRest response){
     	cliente.setFavorecido(null);
     	if(clienteService.salvar(cliente) != null) {
     	response.setMessage("Registro criado com sucesso.");
@@ -69,7 +75,7 @@ public class ClienteController {
                 }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado."));
     }           
 	@PutMapping("/{id}")
-	public ResponseEntity<ResponseRest> atualizarCliente(@PathVariable("id") Long id, @RequestBody Cliente cliente,
+	public ResponseEntity<ResponseRest> atualizarCliente(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente,
 			ResponseRest response) {
 		clienteService.buscarPorId(id).map(clienteBase -> {
 			modelMapper.map(cliente, clienteBase);
@@ -82,4 +88,18 @@ public class ClienteController {
 		response.setType(messageType.SUCESSO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Object> MethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+		ResponseRest response = new ResponseRest();
+		List<String> erros = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage)
+				.collect(Collectors.toList());	
+		
+		for (String listaErro : erros) {
+			response.setMessage(listaErro);
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }
