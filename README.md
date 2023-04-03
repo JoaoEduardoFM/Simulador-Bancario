@@ -45,5 +45,4 @@
 ## ## Esses recursos estão em desenvolvimento:
 
 - Em desenvolvimento ⚠️
-1) Adicionar validation.
-2) Lapidar código.
+1) Lapidar código.
