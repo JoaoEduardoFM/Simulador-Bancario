@@ -16,6 +16,7 @@ import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,6 +67,7 @@ public class Cliente implements Serializable {
 	@DecimalMax(value = "9999999999999.99", message = "O campo referente ao saldo não pode ser nulo e deve possuir no máximo 13 dígitos inteiros e 2 dígitos decimais.")
 	@DecimalMin(value = "0", message = "O campo referente ao saldo não pode ser nulo e deve possuir no máximo 13 dígitos inteiros e 2 dígitos decimais.")
 	@Column(name = "saldo")
+	@JsonProperty("valor")
 	private BigDecimal saldo;
 
 	@Range(min = 0,max = 999999999999999L, message = "O campo referente ao favorecido, deve possuir no máximo 15 dígitos.")

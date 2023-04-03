@@ -1,6 +1,8 @@
 package br.com.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -42,6 +44,7 @@ public class ClienteController{
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ResponseRest> salvar(@RequestBody @Valid Cliente cliente, ResponseRest response){
     	cliente.setFavorecido(null);
+    	cliente.setSaldo(null);
     	if(clienteService.salvar(cliente) != null) {
     	response.setMessage("Registro criado com sucesso.");
     	response.setType(messageType.SUCESSO);
@@ -61,6 +64,7 @@ public class ClienteController{
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Cliente buscarClientePorId(@PathVariable("id") Long id){
+    	
         return clienteService.buscarPorId(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado."));
     }
@@ -74,16 +78,17 @@ public class ClienteController{
                     return Void.TYPE;
                 }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado."));
     }           
+
 	@PutMapping("/{id}")
-	public ResponseEntity<ResponseRest> atualizarCliente(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente,
-			ResponseRest response) {
+	public ResponseEntity<ResponseRest> atualizarCliente(@PathVariable("id") Long id,
+			@RequestBody @Valid Cliente cliente, ResponseRest response) {
+		BigDecimal saldo = verificaSaldo(id);
 		clienteService.buscarPorId(id).map(clienteBase -> {
 			modelMapper.map(cliente, clienteBase);
-			clienteService.salvar(clienteBase);
-			response.setMessage("Erro ao atualizar registro.");
-			response.setType(messageType.ERRO);
-			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado."));
+			clienteBase.setSaldo(saldo);
+			clienteService.salvar(clienteBase);			
+			return new ResponseEntity<>(clienteBase, HttpStatus.OK);
+		});
 		response.setMessage("Registro atualizado com sucesso.");
 		response.setType(messageType.SUCESSO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -101,5 +106,13 @@ public class ClienteController{
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+	
+	public BigDecimal verificaSaldo(Long id){
+		Optional<Cliente> cliente = clienteService.buscarPorId(id);
+		if (cliente.isEmpty()) {
+			return null;
+		}
+		return cliente.get().getSaldo();
     }
 }

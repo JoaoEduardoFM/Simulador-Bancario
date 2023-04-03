@@ -35,13 +35,33 @@ public class SaqueController {
 	@PatchMapping("{id}")
 	public ResponseEntity<ResponseRest> sacaValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente,
 			ResponseRest response) {
-    	
-    	if(verificaSaldo(id).compareTo(cliente.getSaldo()) < 0) { 
-    		response.setMessage("O Valor do saque é superior ao seu saldo de " + verificaSaldo(id));
+		
+		if(validaSeExisteId(id).equals(false)) {
+    		response.setMessage("O Id informado:"+ id + " não existe.");
+        	response.setType(messageType.ERRO);    	
+        	return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    	}
+		
+		if(cliente.getSaldo() == null) {
+			response.setMessage("O campo referente ao valor de saque, não pode ser nulo.");
         	response.setType(messageType.ERRO);    	
         	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}
+		
+		if(verificaSaldo(id) == null) {
+			response.setMessage("Saldo insuficiente. saldo:0.00");
+        	response.setType(messageType.ATENCAO);    	
+        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}
+    	
+		if(verificaSaldo(id).compareTo(cliente.getSaldo()) < 0 && verificaSaldo(id) != null) { 
+    		response.setMessage("O Valor do saque é superior ao seu saldo de " + verificaSaldo(id));
+        	response.setType(messageType.ATENCAO);    	
+        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     	} 	
+		if(verificaSaldo(id) != null){
     	cliente.setSaldo(verificaSaldo(id).subtract(cliente.getSaldo()));
+		}
     	alteraSaldo(cliente, cliente.getSaldo(), id);
 		response.setMessage("Saque realizado com sucesso. saldo:" + cliente.getSaldo() );
 		response.setType(messageType.SUCESSO);
@@ -68,6 +88,18 @@ public class SaqueController {
     	cliente.setFavorecido(null);
     	cliente.setSaldo(saldo);
         return clienteService.salvar(cliente);
+	}
+	
+	public Boolean validaSeExisteId(Long id) {
+		Optional<Cliente> cliente = clienteService.buscarPorId(id);
+		try {
+		if(cliente.get().getId() != null) {
+	     return true;
+		}
+		}catch(Exception e) {
+		return false;
+		}
+		return false;
 	}
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

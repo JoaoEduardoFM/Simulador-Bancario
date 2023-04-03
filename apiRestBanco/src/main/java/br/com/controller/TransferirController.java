@@ -36,9 +36,34 @@ public class TransferirController {
 		public ResponseEntity<ResponseRest> tranferirValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente, ResponseRest response) {
 	    	
 	    	BigDecimal valorJsonSaldo = new BigDecimal(cliente.getSaldo().toString());
-	    	if(verificaSaldo(id).compareTo(cliente.getSaldo()) < 0) { 
-	    		response.setMessage("O Valor do saque é superior ao seu saldo de " + verificaSaldo(id));
+	    	
+	    	if(validaSeExisteId(id).equals(false)) {
+	    		response.setMessage("O Id informado:"+ id + " não existe.");
 	        	response.setType(messageType.ERRO);    	
+	        	return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	    	}	    	
+	    	
+	    	if(validaSeExisteId(cliente.getFavorecido()).equals(false)) {
+	    		response.setMessage("A conta favorecido informada:"+ cliente.getFavorecido() + " não existe.");
+	        	response.setType(messageType.ERRO);    	
+	        	return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	    	}
+	    	
+	    	if(cliente.getSaldo() == null) {
+				response.setMessage("O campo referente ao valor a transferir, não pode ser nulo.");
+	        	response.setType(messageType.ERRO);    	
+	        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			}
+	    	
+	    	if(verificaSaldo(id) == null) {  
+	    		response.setMessage("Saldo insuficiente. Saldo:0.00");
+	        	response.setType(messageType.ATENCAO);    	
+	        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	    	}
+	    	
+	    	if(verificaSaldo(id).compareTo(cliente.getSaldo()) < 0 && verificaSaldo(id) != null) { 
+	    		response.setMessage("O Valor de transferência é superior ao seu saldo de " + verificaSaldo(id));
+	        	response.setType(messageType.ATENCAO);    	
 	        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	    	} 
 	    	
@@ -46,23 +71,20 @@ public class TransferirController {
 	    		response.setMessage("A conta preenchida deve ser diferente da conta débito: " + id);
 	        	response.setType(messageType.ERRO);    	
 	        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-	    	}
-	    	
-	    	if(validaSeExisteId(cliente.getFavorecido()).equals(false)) {
-	    		response.setMessage("A conta favorecido informada: "+ cliente.getFavorecido() + " não existe.");
-	        	response.setType(messageType.ERRO);    	
-	        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-	    	}
-	    	cliente.getSaldo();
+	    	}    	
 	    	
 	    	// credita valor na conta corrente favorecido.
+	    	if(verificaSaldo(id) != null){
 	    	creditaValor(cliente.getSaldo(), cliente.getFavorecido(), cliente);
 	    	// debita valor da conta corrente débito.
-	    	debitaValor(valorJsonSaldo, id, cliente);
-	    	
+	    	debitaValor(valorJsonSaldo, id, cliente);	    	
 			response.setMessage("transferência realizada com sucesso. saldo:" + cliente.getSaldo() );
 			response.setType(messageType.SUCESSO);
 			return new ResponseEntity<>(response, HttpStatus.OK);
+	    	}
+	    	response.setMessage("Erro ao efetuar transferência.");
+			response.setType(messageType.ERRO);
+	    	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
 	 
 		public BigDecimal verificaSaldo(Long id) {
@@ -74,7 +96,9 @@ public class TransferirController {
 		}
 
 		public void creditaValor(BigDecimal valor, Long id, Cliente cliente) {
-			cliente.setSaldo(verificaSaldo(id).add(valor));
+			if(verificaSaldo(cliente.getFavorecido()) != null){
+			cliente.setSaldo(verificaSaldo(id).add(valor));	
+			}
 			alteraSaldo(cliente, cliente.getSaldo(), id);
 		}
 

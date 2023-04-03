@@ -35,13 +35,38 @@ public class depositoController {
 	@PatchMapping("{id}")
 	public ResponseEntity<ResponseRest> depositaValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente,
 			ResponseRest response) {	
+	
+		if(cliente.getSaldo() == null) {
+			response.setMessage("O campo referente ao valor de depósito, não pode ser nulo.");
+        	response.setType(messageType.ERRO);    	
+        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}
+		if(validaSeExisteId(id).equals(false)) {
+    		response.setMessage("O Id informado:"+ id + " não existe.");
+        	response.setType(messageType.ERRO);    	
+        	return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    	}
+		if(verificaSaldo(id) != null){
     	cliente.setSaldo(verificaSaldo(id).add(cliente.getSaldo()));
+		}
     	alteraSaldo(cliente, cliente.getSaldo(), id);
 		response.setMessage("Depósito realizado com sucesso. saldo:" + cliente.getSaldo() );
 		response.setType(messageType.SUCESSO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	public Boolean validaSeExisteId(Long id) {
+		Optional<Cliente> cliente = clienteService.buscarPorId(id);
+		try {
+		if(cliente.get().getId() != null) {
+	     return true;
+		}
+		}catch(Exception e) {
+		return false;
+		}
+		return false;
+	}
+		
 	public BigDecimal verificaSaldo(Long id){
 		Optional<Cliente> cliente = clienteService.buscarPorId(id);
 		if (cliente.isEmpty()) {
