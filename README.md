@@ -41,6 +41,7 @@
 4) Efetua saque.
 5) Efetua deposito.
 6) Efetua transferência entre contas.
+7) Adicionado Validation.
 
 ## ## Esses recursos estão em desenvolvimento:
 
