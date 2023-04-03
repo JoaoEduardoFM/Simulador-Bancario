@@ -40,7 +40,7 @@
 3) Busca registro pelo ID.
 4) Efetua saque.
 5) Efetua deposito.
-6) Efetua transferencia entre contas.
+6) Efetua transferência entre contas.
 
 ## ## Esses recursos estão em desenvolvimento:
 
