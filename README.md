@@ -43,7 +43,7 @@
 6) Efetua transferência entre contas.
 7) Adicionado Validation.
 
-## ## Esses recursos estão em desenvolvimento:
+## Esses recursos estão em desenvolvimento:
 
 - Em desenvolvimento ⚠️
 1) Lapidar código.
