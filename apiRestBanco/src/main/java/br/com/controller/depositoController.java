@@ -1,29 +1,26 @@
 package br.com.controller;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.entity.Cliente;
 import br.com.response.ResponseRest;
 import br.com.response.ResponseRest.messageType;
 import br.com.service.ClienteService;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/deposito")
@@ -33,9 +30,13 @@ public class depositoController {
     private ClienteService clienteService;
 	
 	@PatchMapping("{id}")
-	public ResponseEntity<ResponseRest> depositaValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente,
-			ResponseRest response) {	
-	
+	@ResponseBody 
+	@ApiOperation (
+      value = "Deposita valor em conta.",
+      notes = "Deposita valor em conta vinculadas ao Id cadastrado."
+    ) 
+	public ResponseEntity<ResponseRest> depositaValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente, @ApiIgnore ResponseRest response) {	
+			
 		if(cliente.getSaldo() == null) {
 			response.setMessage("O campo referente ao valor de depósito, não pode ser nulo.");
         	response.setType(messageType.ERRO);    	
