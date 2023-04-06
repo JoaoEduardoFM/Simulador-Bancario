@@ -88,19 +88,5 @@ public class depositoController {
     	cliente.setSaldo(saldo);
         return clienteService.salvar(cliente);
 	}
-	
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<Object> MethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-		ResponseRest response = new ResponseRest();
-		List<String> erros = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage)
-				.collect(Collectors.toList());	
-		
-		for (String listaErro : erros) {
-			response.setMessage(listaErro);
-		}
-
-		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 
 }
