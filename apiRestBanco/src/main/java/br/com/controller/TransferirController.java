@@ -1,38 +1,41 @@
 package br.com.controller;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.entity.Cliente;
 import br.com.response.ResponseRest;
 import br.com.response.ResponseRest.messageType;
 import br.com.service.ClienteService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/transferir")
+@Api( value = "transferi valor de conta para conta.", tags = { "Transações" })
 public class TransferirController {
 	
 	@Autowired
     private ClienteService clienteService;
 	
 	 @PatchMapping("{id}")
+	 @ResponseBody 
+		@ApiOperation (
+	      value = "transferir valor",
+	      notes = "trasnferi valor para outra conta corrente."
+	    )
 		public ResponseEntity<ResponseRest> tranferirValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente, ResponseRest response) {
 	    	
 	    	BigDecimal valorJsonSaldo = new BigDecimal(cliente.getSaldo().toString());

@@ -19,11 +19,13 @@ import br.com.entity.Cliente;
 import br.com.response.ResponseRest;
 import br.com.response.ResponseRest.messageType;
 import br.com.service.ClienteService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/deposito")
+@Api( value = "deposita valor em conta.", tags = { "Transações" })
 public class depositoController {
 	
 	@Autowired
