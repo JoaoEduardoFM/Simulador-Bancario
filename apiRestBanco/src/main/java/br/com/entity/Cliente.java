@@ -33,7 +33,6 @@ public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-
 	@Id
 	@Range(min = 0, max = 99999, message = "O campo referente ao id do usuário, deve possuir no máximo 5 dígitos." )
 	@Column(name = "id")
