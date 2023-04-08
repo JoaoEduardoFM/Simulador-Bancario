@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import br.com.entity.Cliente;
 import br.com.response.ResponseRest;
@@ -28,6 +26,7 @@ import br.com.response.ResponseRest.messageType;
 import br.com.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/cliente")
@@ -46,10 +45,15 @@ public class ClienteController{
       value = "Cadastra uma conta corrente.",
       notes = "cadastra um cliente vinculado a uma conta corrente."
     )
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ResponseRest> salvar(@RequestBody @Valid Cliente cliente, ResponseRest response){
+    public ResponseEntity<ResponseRest> salvar(@Valid Cliente cliente,  @ApiIgnore ResponseRest response){
     	cliente.setFavorecido(null);
     	cliente.setSaldo(null);
+    	if(validaSeExisteId(cliente.getId())){
+			response.setMessage("Id já cadastrado.");
+	    	response.setType(messageType.ATENCAO);
+	    	return new ResponseEntity<ResponseRest>(response,HttpStatus.BAD_REQUEST);
+			
+		}
     	if(clienteService.salvar(cliente) != null) {
     	response.setMessage("Registro criado com sucesso.");
     	response.setType(messageType.SUCESSO);
@@ -72,41 +76,52 @@ public class ClienteController{
         return clienteService.listaCliente();
     }
 
-    @GetMapping("/{id}")
-    @ResponseBody 
-	@ApiOperation (
-      value = "Lista conta cadastrada pelo Id.",
-      notes = "Lista conta vinculadas a um Id."
-    )
-    @ResponseStatus(HttpStatus.OK)
-    public Cliente buscarClientePorId(@PathVariable("id") Long id){
-    	
-        return clienteService.buscarPorId(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado."));
-    }
+	@GetMapping("/{id}")
+	@ResponseBody
+	@ApiOperation(value = "Lista conta pelo Id.", notes = "Lista conta vinculadas a um Id.")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<?> buscarClientePorId(@PathVariable("id") Long id, @ApiIgnore Cliente cliente, @ApiIgnore ResponseRest response) {
+		if (!validaSeExisteId(cliente.getId())) {
+			response.setMessage("Id não existe.");
+			response.setType(messageType.ATENCAO);
+			return new ResponseEntity<ResponseRest>(response, HttpStatus.BAD_REQUEST);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(clienteService.buscarPorId(id));
+	}
 
-    @DeleteMapping("/{id}")
-    @ResponseBody 
-	@ApiOperation (
-      value = "Exclui conta.",
-      notes = "Exclui uma conta vinculadas a um Id."
-    )
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removerCliente(@PathVariable("id") Long id){
-        clienteService.buscarPorId(id)
-                .map(cliente -> {
-                    clienteService.removerPorId(cliente.getId());
-                    return Void.TYPE;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado."));
-    }           
+	@DeleteMapping("/{id}")
+	@ResponseBody
+	@ApiOperation(
+			value = "Exclui conta.", 
+			notes = "Exclui uma conta vinculadas a um Id.")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public ResponseEntity<?> removerCliente(@PathVariable("id") Long id, @ApiIgnore Cliente cliente,
+			@ApiIgnore ResponseRest response) {
+
+		if (!validaSeExisteId(cliente.getId())) {
+			response.setMessage("Id não existe.");
+			response.setType(messageType.ATENCAO);
+			return new ResponseEntity<ResponseRest>(response, HttpStatus.BAD_REQUEST);
+		}
+
+		clienteService.removerPorId(cliente.getId());
+		response.setMessage("Registro excluído com sucesso");
+		response.setType(messageType.SUCESSO);
+		return new ResponseEntity<ResponseRest>(response, HttpStatus.OK);
+
+	}          
 
 	@PutMapping("/{id}")
 	@ApiOperation (
 		      value = "Atualizar conta.",
 		      notes = "Atualiza uma conta vinculadas a um Id."
 		    )
-	public ResponseEntity<ResponseRest> atualizarCliente(@PathVariable("id") Long id,
-			@RequestBody @Valid Cliente cliente, ResponseRest response) {
+	public ResponseEntity<ResponseRest> atualizarCliente(@PathVariable("id") Long id, @Valid Cliente cliente, @ApiIgnore ResponseRest response) {
+		if (!validaSeExisteId(id)) {
+			response.setMessage("Id não existe.");
+			response.setType(messageType.ATENCAO);
+			return new ResponseEntity<ResponseRest>(response, HttpStatus.BAD_REQUEST);
+		}
 		BigDecimal saldo = verificaSaldo(id);
 		clienteService.buscarPorId(id).map(clienteBase -> {
 			modelMapper.map(cliente, clienteBase);
@@ -126,4 +141,16 @@ public class ClienteController{
 		}
 		return cliente.get().getSaldo();
     }
+	
+	public Boolean validaSeExisteId(Long id) {
+		Optional<Cliente> buscaPorID = clienteService.buscarPorId(id);
+		try {
+		if(buscaPorID.get().getId() != null) {
+	     return true;
+		}
+		}catch(Exception e) {
+		return false;
+		}
+		return false;
+	}
 }

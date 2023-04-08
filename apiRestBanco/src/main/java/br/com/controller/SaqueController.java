@@ -21,86 +21,84 @@ import br.com.response.ResponseRest.messageType;
 import br.com.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/sacar")
-@Api( value = "sacar valor.", tags = { "Transações" })
+@Api(value = "sacar valor.", tags = { "Transações" })
 public class SaqueController {
-	
+
 	@Autowired
-    private ClienteService clienteService;
-	
+	private ClienteService clienteService;
+
 	@PatchMapping("{id}")
-		@ResponseBody 
-		@ApiOperation (
-	      value = "efetua saque",
-	      notes = "saca valor de conta corrente."
-	    )
-	public ResponseEntity<ResponseRest> sacaValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente,
-			ResponseRest response) {
-		
-		if(validaSeExisteId(id).equals(false)) {
-    		response.setMessage("O Id informado:"+ id + " não existe.");
-        	response.setType(messageType.ERRO);    	
-        	return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    	}
-		
-		if(cliente.getSaldo() == null) {
+	@ResponseBody
+	@ApiOperation(value = "efetua saque.", notes = "saca valor de conta corrente.")
+	public ResponseEntity<ResponseRest> sacaValor(@ApiIgnore @Valid Cliente cliente, Long id, BigDecimal saque,
+			@ApiIgnore ResponseRest response) {
+
+		if (validaSeExisteId(id).equals(false)) {
+			response.setMessage("O Id informado:" + id + " não existe.");
+			response.setType(messageType.ERRO);
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		}
+
+		if (saque == null) {
 			response.setMessage("O campo referente ao valor de saque, não pode ser nulo.");
-        	response.setType(messageType.ERRO);    	
-        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			response.setType(messageType.ERRO);
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
-		
-		if(verificaSaldo(id) == null) {
+
+		if (verificaSaldo(id) == null) {
 			response.setMessage("Saldo insuficiente. saldo:0.00");
-        	response.setType(messageType.ATENCAO);    	
-        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			response.setType(messageType.ATENCAO);
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
-    	
-		if(verificaSaldo(id).compareTo(cliente.getSaldo()) < 0 && verificaSaldo(id) != null) { 
-    		response.setMessage("O Valor do saque é superior ao seu saldo de " + verificaSaldo(id));
-        	response.setType(messageType.ATENCAO);    	
-        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    	} 	
-		if(verificaSaldo(id) != null){
-    	cliente.setSaldo(verificaSaldo(id).subtract(cliente.getSaldo()));
+
+		if (verificaSaldo(id).compareTo(saque) < 0 && verificaSaldo(id) != null) {
+			response.setMessage("O Valor do saque é superior ao seu saldo de " + verificaSaldo(id));
+			response.setType(messageType.ATENCAO);
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
-    	alteraSaldo(cliente, cliente.getSaldo(), id);
-		response.setMessage("Saque realizado com sucesso. saldo:" + cliente.getSaldo() );
+		if (verificaSaldo(id) != null) {
+			cliente.setSaldo(verificaSaldo(id).subtract(saque));
+		}
+		alteraSaldo(cliente, cliente.getSaldo(), id);
+		response.setMessage("Saque realizado com sucesso. saldo:" + cliente.getSaldo());
 		response.setType(messageType.SUCESSO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
-	public BigDecimal verificaSaldo(Long id){
+
+	public BigDecimal verificaSaldo(Long id) {
 		Optional<Cliente> cliente = clienteService.buscarPorId(id);
 		if (cliente.isEmpty()) {
 			return null;
 		}
 		return cliente.get().getSaldo();
-    }
-	
-	public Cliente alteraSaldo(Cliente cliente, BigDecimal saldo, Long id){
-    	Optional<Cliente> clienteCadastrado = clienteService.buscarPorId(id);
-    	cliente.setCdCta(clienteCadastrado.get().getCdCta());
-    	cliente.setCpf(clienteCadastrado.get().getCpf());
-    	cliente.setEmail(clienteCadastrado.get().getEmail());
-    	cliente.setId(clienteCadastrado.get().getId());
-    	cliente.setNome(clienteCadastrado.get().getNome());
-    	cliente.setNrAgen(clienteCadastrado.get().getNrAgen());
-    	cliente.setNrInst(clienteCadastrado.get().getNrInst());
-    	cliente.setFavorecido(null);
-    	cliente.setSaldo(saldo);
-        return clienteService.salvar(cliente);
 	}
-	
+
+	public Cliente alteraSaldo(Cliente cliente, BigDecimal saldo, Long id) {
+		Optional<Cliente> clienteCadastrado = clienteService.buscarPorId(id);
+		cliente.setCdCta(clienteCadastrado.get().getCdCta());
+		cliente.setCpf(clienteCadastrado.get().getCpf());
+		cliente.setEmail(clienteCadastrado.get().getEmail());
+		cliente.setId(clienteCadastrado.get().getId());
+		cliente.setNome(clienteCadastrado.get().getNome());
+		cliente.setNrAgen(clienteCadastrado.get().getNrAgen());
+		cliente.setNrInst(clienteCadastrado.get().getNrInst());
+		cliente.setFavorecido(null);
+		cliente.setSaldo(saldo);
+		return clienteService.salvar(cliente);
+	}
+
 	public Boolean validaSeExisteId(Long id) {
 		Optional<Cliente> cliente = clienteService.buscarPorId(id);
 		try {
-		if(cliente.get().getId() != null) {
-	     return true;
-		}
-		}catch(Exception e) {
-		return false;
+			if (cliente.get().getId() != null) {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
 		}
 		return false;
 	}

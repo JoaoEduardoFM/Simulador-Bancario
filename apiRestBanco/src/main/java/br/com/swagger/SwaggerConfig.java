@@ -27,7 +27,8 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("API Bancaria")
-                .description("A API bancária em questão oferece diversos serviços relacionados a contas bancárias, incluindo transações entre contas, saques e depósitos")
+                .description("Gostaríamos de apresentar a você a nossa API bancária, uma solução completa que oferece diversos serviços relacionados a contas bancárias. \n"
+                		+ "Com a nossa API, seus clientes terão acesso a funcionalidades de transações entre contas, saques e depósitos diretamente de sua plataforma.")
                 .version("1.0.0")
                 .build();
     }

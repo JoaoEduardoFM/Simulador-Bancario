@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +19,7 @@ import br.com.response.ResponseRest.messageType;
 import br.com.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/transferir")
@@ -33,27 +32,27 @@ public class TransferirController {
 	 @PatchMapping("{id}")
 	 @ResponseBody 
 		@ApiOperation (
-	      value = "transferir valor",
+	      value = "transferir valor.",
 	      notes = "trasnferi valor para outra conta corrente."
 	    )
-		public ResponseEntity<ResponseRest> tranferirValor(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente, ResponseRest response) {
+		public ResponseEntity<ResponseRest> tranferirValor(Long id, Long favorecido, BigDecimal saldo, @ApiIgnore @Valid Cliente cliente, @ApiIgnore ResponseRest response) {
 	    	
 	    	BigDecimal valorJsonSaldo = new BigDecimal(cliente.getSaldo().toString());
 	    	
 	    	if(validaSeExisteId(id).equals(false)) {
-	    		response.setMessage("O Id informado:"+ id + " não existe.");
+	    		response.setMessage("O Id informado:"+ id + " não existe");
 	        	response.setType(messageType.ERRO);    	
 	        	return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	    	}	    	
 	    	
 	    	if(validaSeExisteId(cliente.getFavorecido()).equals(false)) {
-	    		response.setMessage("A conta favorecido informada:"+ cliente.getFavorecido() + " não existe.");
+	    		response.setMessage("A conta favorecido informada:"+ cliente.getFavorecido() + " não existe");
 	        	response.setType(messageType.ERRO);    	
 	        	return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	    	}
 	    	
 	    	if(cliente.getSaldo() == null) {
-				response.setMessage("O campo referente ao valor a transferir, não pode ser nulo.");
+				response.setMessage("O campo referente ao valor a transferir, não pode ser nulo");
 	        	response.setType(messageType.ERRO);    	
 	        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 			}
@@ -71,7 +70,7 @@ public class TransferirController {
 	    	} 
 	    	
 	    	if(cliente.getFavorecido().equals(id)) {
-	    		response.setMessage("A conta preenchida deve ser diferente da conta débito: " + id);
+	    		response.setMessage("O id deve ser diferente da conta favorecido");
 	        	response.setType(messageType.ERRO);    	
 	        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	    	}    	
@@ -81,11 +80,11 @@ public class TransferirController {
 	    	creditaValor(cliente.getSaldo(), cliente.getFavorecido(), cliente);
 	    	// debita valor da conta corrente débito.
 	    	debitaValor(valorJsonSaldo, id, cliente);	    	
-			response.setMessage("transferência realizada com sucesso. saldo:" + cliente.getSaldo() );
+			response.setMessage("transferência realizada com sucesso.");
 			response.setType(messageType.SUCESSO);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 	    	}
-	    	response.setMessage("Erro ao efetuar transferência.");
+	    	response.setMessage("Erro ao efetuar transferência");
 			response.setType(messageType.ERRO);
 	    	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
