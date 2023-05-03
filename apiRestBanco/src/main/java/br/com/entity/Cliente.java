@@ -64,7 +64,7 @@ public class Cliente implements Serializable {
 	@ApiModelProperty(value = "E-mail", required = true)
 	private String email;
 
-	@Length(min = 0, max = 14, message = "O campo referente ao cpf, deve possuir no máximo 11 caracteres.")
+	@Length(min = 0, max = 11, message = "O campo referente ao cpf, deve possuir no máximo 11 caracteres.")
 	@Column(name = "cpf")
 	@ApiModelProperty(value = "Cpf", required = true)
 	private String cpf;
