@@ -4,7 +4,7 @@
 
 > Status: Em desenvolvimento ⚠️
 
-### É uma aplicação planejada por mim, onde realizo o CRUD e operações bancárias.
+### É uma aplicação planejada por mim, onde realizo o CRUD e simulo operações bancárias.
 
 ## Alguns campos no modelo principal são:
 
