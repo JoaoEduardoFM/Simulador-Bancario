@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Email;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -56,12 +57,12 @@ public class Cliente implements Serializable {
 
 	@Length(min = 0, max = 60, message = "O campo referente ao nome, deve possuir no máximo 60 caracteres.")
 	@Column(name = "nome", nullable = false)
-	@ApiModelProperty(value = "Nome", required = true)
+	@ApiModelProperty(value = "Nome")
 	private String nome;
 
 	@Length(min = 0, max = 60, message = "O campo referente ao email, deve possuir no máximo 60 caracteres.")
 	@Column(name = "email")
-	@ApiModelProperty(value = "E-mail", required = true)
+	@ApiModelProperty(value = "E-mail")
 	private String email;
 
 	@Length(min = 0, max = 11, message = "O campo referente ao cpf, deve possuir no máximo 11 caracteres.")
@@ -69,8 +70,8 @@ public class Cliente implements Serializable {
 	@ApiModelProperty(value = "Cpf", required = true)
 	private String cpf;
 
-	@DecimalMax(value = "9999999999999.99", message = "O campo referente ao saldo não pode ser nulo e deve possuir no máximo 13 dígitos inteiros e 2 dígitos decimais.")
-	@DecimalMin(value = "0", message = "O campo referente ao saldo não pode ser nulo e deve possuir no máximo 13 dígitos inteiros e 2 dígitos decimais.")
+	@DecimalMax(value = "9999999999999.99", message = "O campo referente ao saldo deve possuir no máximo 13 dígitos inteiros e 2 dígitos decimais.")
+	@DecimalMin(value = "0", message = "O campo referente ao saldo deve possuir no máximo 13 dígitos inteiros e 2 dígitos decimais.")
 	@Column(name = "saldo")
 	@JsonProperty("valor")
 	@ApiModelProperty(value = "Saldo da conta", required = false, hidden = true)
@@ -80,4 +81,5 @@ public class Cliente implements Serializable {
 	@Column(name = "favorecido")
 	@ApiModelProperty(value = "Id favorecido", required = false, hidden = true)
 	private Long favorecido;
+	
 }
