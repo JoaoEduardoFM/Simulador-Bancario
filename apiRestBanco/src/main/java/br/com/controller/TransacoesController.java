@@ -62,7 +62,7 @@ public class TransacoesController {
 	@ResponseBody
 	@ApiOperation(
 			value = "Transferir valor.", 
-			notes = "Trasnferi valor para outra conta corrente.")
+			notes = "Trasnferir valor para outra conta corrente.")
 	public ResponseEntity<?> tranferirValor(Long id, Long favorecido, BigDecimal saldo,
 			@ApiIgnore @Valid Cliente cliente, @ApiIgnore ResponseRest response) {
 		ResponseEntity<?> transferir = transferirService.tranferirValor(id, favorecido, saldo, cliente, response);
