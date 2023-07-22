@@ -36,7 +36,9 @@ public class TransacoesController {
 
 	@PatchMapping("/sacar/{id}")
 	@ResponseBody
-	@ApiOperation(value = "efetua saque.", notes = "saca valor de conta corrente.")
+	@ApiOperation(
+			value = "Efetua saque.", 
+			notes = "Saca valor de conta corrente.")
 	public ResponseEntity<?> sacaValor(
 			@ApiIgnore @Valid Cliente cliente, Long id, BigDecimal saque, @ApiIgnore ResponseRest response) {
 		ResponseEntity<?> sacarValor = saqueService.sacaValor(cliente, id, saque, response);
@@ -58,7 +60,9 @@ public class TransacoesController {
 	
 	@PatchMapping("/transferir/{id}")
 	@ResponseBody
-	@ApiOperation(value = "transferir valor.", notes = "trasnferi valor para outra conta corrente.")
+	@ApiOperation(
+			value = "Transferir valor.", 
+			notes = "Trasnferi valor para outra conta corrente.")
 	public ResponseEntity<?> tranferirValor(Long id, Long favorecido, BigDecimal saldo,
 			@ApiIgnore @Valid Cliente cliente, @ApiIgnore ResponseRest response) {
 		ResponseEntity<?> transferir = transferirService.tranferirValor(id, favorecido, saldo, cliente, response);
