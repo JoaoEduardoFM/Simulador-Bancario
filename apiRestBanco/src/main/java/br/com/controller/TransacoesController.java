@@ -48,13 +48,10 @@ public class TransacoesController {
 	@PatchMapping("/depositar/{id}")
 	@ResponseBody 
 	@ApiOperation (
-      value = "Deposita valor em conta.",
-      notes = "Deposita valor em conta vinculadas ao Id cadastrado."
-    ) 
+			value = "Deposita valor em conta.",
+			notes = "Deposita valor em conta vinculadas ao Id cadastrado.") 
 	public ResponseEntity<?> depositaValor(Long id, BigDecimal deposito, @ApiIgnore @Valid Cliente cliente, @ApiIgnore ResponseRest response) {	
-			
 		ResponseEntity<?> depositar = depositoService.depositaValor(id, deposito, cliente, response);
-
 		return depositar;
 	}
 	

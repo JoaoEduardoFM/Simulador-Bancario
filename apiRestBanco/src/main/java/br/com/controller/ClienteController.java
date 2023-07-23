@@ -36,8 +36,8 @@ public class ClienteController{
     @PostMapping()
 	@ResponseBody 
 	@ApiOperation (
-      value = "Cadastra uma conta corrente.",
-      notes = "cadastra um cliente vinculado a uma conta corrente.")
+			value = "Cadastra uma conta corrente.",
+			notes = "cadastra um cliente vinculado a uma conta corrente.")
     public ResponseEntity<?> salvar(@Valid Cliente cliente,  @ApiIgnore ResponseRest response){
     	ResponseEntity<?> salvaCliente = clienteService.salvarCliente(cliente, response);
     	return salvaCliente;
@@ -46,8 +46,8 @@ public class ClienteController{
     @GetMapping
     @ResponseBody 
 	@ApiOperation (
-      value = "Lista contas cadastradas.",
-      notes = "Lista contas vinculadas as contas corrente.")
+			value = "Lista contas cadastradas.",
+			notes = "Lista contas vinculadas as contas corrente.")
     @ResponseStatus(HttpStatus.OK)
     public List<Cliente> listaCliente(){
         return clienteService.listaCliente();
@@ -55,7 +55,9 @@ public class ClienteController{
 
 	@GetMapping("/{id}")
 	@ResponseBody
-	@ApiOperation(value = "Lista conta pelo Id.", notes = "Lista conta vinculadas a um Id.")
+	@ApiOperation(
+			value = "Lista conta pelo Id.", 
+			notes = "Lista conta vinculadas a um Id.")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> buscarClientePorId(@PathVariable("id") Long id, @ApiIgnore Cliente cliente, @ApiIgnore ResponseRest response) {
 		ResponseEntity<?> buscaPorId = clienteService.buscarClientePorId(id, cliente, response);
@@ -85,7 +87,9 @@ public class ClienteController{
 	
 	@GetMapping("/saldo/{id}")
 	@ResponseBody
-	@ApiOperation(value = "Verifica saldo baseado no id cadastrado.", notes = "Verifica saldo.")
+	@ApiOperation(
+			value = "Verifica saldo baseado no id cadastrado.", 
+			notes = "Verifica saldo.")
 	@ResponseStatus(HttpStatus.OK)
 	public BigDecimal verificarSaldo(@PathVariable("id") Long id) {
 		BigDecimal verificaSaldo = clienteService.verificaSaldo(id);
