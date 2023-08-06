@@ -2,6 +2,7 @@ package br.com.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.OptionalDouble;
 
 import javax.validation.Valid;
 
@@ -94,5 +95,27 @@ public class ClienteController{
 	public BigDecimal verificarSaldo(@PathVariable("id") Long id) {
 		BigDecimal verificaSaldo = clienteService.verificaSaldo(id);
 		return verificaSaldo;
+	}
+	
+	@GetMapping("/balancoSaldos")
+	@ResponseBody
+	@ApiOperation(
+			value = "Calcula o saldo de todos os clientes cadastrados", 
+			notes = "Balanço saldo de clientes cadastrados.")
+	@ResponseStatus(HttpStatus.OK)
+	public Double balancoSaldoClientes() {
+		Double balancoSaldo = clienteService.balancoSaldoClientes();
+		return balancoSaldo;
+	}
+	
+	@GetMapping("/mediaSaldos")
+	@ResponseBody
+	@ApiOperation(
+			value = "Calcula a média saldo de todos os clientes cadastrados", 
+			notes = "Média dos saldos de clientes cadastrados.")
+	@ResponseStatus(HttpStatus.OK)
+	public OptionalDouble MediaSaldoClientes() {
+		OptionalDouble balancoSaldo = clienteService.MediaSaldoClientes();
+		return balancoSaldo;
 	}
 }

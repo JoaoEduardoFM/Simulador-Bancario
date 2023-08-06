@@ -1,8 +1,12 @@
 package br.com.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.TreeMap;
+import java.util.function.ToDoubleFunction;
 
 import javax.validation.Valid;
 
@@ -129,5 +133,23 @@ public class ClienteService {
 			return null;
 		}
 		return cliente.get().getSaldo();
+    }
+    
+    public Double balancoSaldoClientes() {
+    	List<Cliente> lista = new ArrayList<>();
+    	List<Cliente> clientes = listaCliente();
+    	lista.addAll(clientes);
+    	Double soma =lista.stream().mapToDouble(value -> value.getSaldo().doubleValue()).sum();
+		return soma;
+    	
+    }
+    
+    public OptionalDouble MediaSaldoClientes() {
+    	List<Cliente> lista = new ArrayList<>();
+    	List<Cliente> clientes = listaCliente();
+    	lista.addAll(clientes);
+    	OptionalDouble soma =lista.stream().mapToDouble(value -> value.getSaldo().doubleValue()).average();
+		return soma;
+    	
     }
 }
