@@ -1,6 +1,7 @@
 package br.com;
 
 import java.awt.Desktop;
+import java.io.Console;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,7 +11,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootApplication
+@Slf4j
 public class ClienteApplication {
 
 	@Bean
@@ -26,12 +30,9 @@ public class ClienteApplication {
 		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 			SpringApplication.run(ClienteApplication.class, args);
 			Desktop.getDesktop().browse(new URI(swaggerUrl));
+			log.info("Aplicação iniciada.");
 
 		}
-
-		System.err.println(" {Bem-vindo à nossa API bancária! \n "
-				+ "Para acessar as funcionalidades acesse o swagger no seguinte link. \n "
-				+ "http://localhost:8080/swagger-ui.html#/}");
 	}
 
 }
