@@ -35,6 +35,12 @@ public class SaqueService {
 			response.setType(messageType.ERRO);
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
+		
+		if(saque.compareTo(BigDecimal.ZERO) < 0) {
+			response.setMessage("O valor da transação não pode ser negativa.");
+        	response.setType(messageType.ERRO);    	
+        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}
 
 		if (verificaSaldo(id) == null) {
 			response.setMessage("Saldo insuficiente. saldo:0.00");

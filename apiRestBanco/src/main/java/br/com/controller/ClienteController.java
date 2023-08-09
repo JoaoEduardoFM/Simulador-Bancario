@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,7 +40,7 @@ public class ClienteController{
 	@ApiOperation (
 			value = "Cadastra uma conta corrente.",
 			notes = "cadastra um cliente vinculado a uma conta corrente.")
-    public ResponseEntity<?> salvar(@Valid Cliente cliente,  @ApiIgnore ResponseRest response){
+    public ResponseEntity<?> salvar(@RequestBody @Valid Cliente cliente,  @ApiIgnore ResponseRest response){
     	ResponseEntity<?> salvaCliente = clienteService.salvarCliente(cliente, response);
     	return salvaCliente;
     }
@@ -81,7 +82,7 @@ public class ClienteController{
 	@ApiOperation (
 		      value = "Atualizar conta.",
 		      notes = "Atualiza uma conta vinculadas a um Id.")
-	public ResponseEntity<?> atualizarCliente(@PathVariable("id") Long id, @Valid Cliente cliente, @ApiIgnore ResponseRest response) {
+	public ResponseEntity<?> atualizarCliente(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente, @ApiIgnore ResponseRest response) {
 		ResponseEntity<?> atualiza = clienteService.atualizarCliente(id, cliente, response);
 		return atualiza;
 	}

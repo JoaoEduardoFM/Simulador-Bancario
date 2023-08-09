@@ -6,9 +6,6 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Email;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -70,8 +67,6 @@ public class Cliente implements Serializable {
 	@ApiModelProperty(value = "Cpf", required = true)
 	private String cpf;
 
-	@DecimalMax(value = "9999999999999.99", message = "O campo referente ao saldo deve possuir no máximo 13 dígitos inteiros e 2 dígitos decimais.")
-	@DecimalMin(value = "0", message = "O campo referente ao saldo deve possuir no máximo 13 dígitos inteiros e 2 dígitos decimais.")
 	@Column(name = "saldo")
 	@JsonProperty("valor")
 	@ApiModelProperty(value = "Saldo da conta", required = false, hidden = true)

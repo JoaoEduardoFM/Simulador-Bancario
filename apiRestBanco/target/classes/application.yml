@@ -1,16 +1,16 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:file:./data/exemplo # Armazenamento em arquivo no diretório 'data'
     username: sa
     password:
-    driverClassName: org.h2.Driver
+    driver-class-name: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    properties:
-      hibernate.show_sql: true
-      hibernate.format_sql: true
     defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update  # Use 'update' para atualizar o esquema do banco de dados
   h2:
     console:
       enabled: true
       path: /h2
+      

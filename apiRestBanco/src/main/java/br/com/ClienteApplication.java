@@ -1,5 +1,10 @@
 package br.com;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,18 +14,24 @@ import org.springframework.context.annotation.Bean;
 public class ClienteApplication {
 
 	@Bean
-	public ModelMapper modelMapper(){
+	public ModelMapper modelMapper() {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setSkipNullEnabled(true);
 		return modelMapper;
 	}
 
+	public static void main(String[] args) throws IOException, URISyntaxException {
+		String swaggerUrl = "http://localhost:8080/swagger-ui.html#/";
 
-	public static void main(String[] args) {
-		SpringApplication.run(ClienteApplication.class, args);
+		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			SpringApplication.run(ClienteApplication.class, args);
+			Desktop.getDesktop().browse(new URI(swaggerUrl));
+
+		}
+
 		System.err.println(" {Bem-vindo à nossa API bancária! \n "
-		   		+ "Para acessar as funcionalidades acesse o swagger no seguinte link. \n "
-		   		+ "http://localhost:8080/swagger-ui.html#/}");
+				+ "Para acessar as funcionalidades acesse o swagger no seguinte link. \n "
+				+ "http://localhost:8080/swagger-ui.html#/}");
 	}
 
 }

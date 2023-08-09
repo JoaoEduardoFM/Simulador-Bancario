@@ -24,6 +24,12 @@ public class TransferirService {
     	
     	BigDecimal valorJsonSaldo = new BigDecimal(cliente.getSaldo().toString());
     	
+    	if(saldo.compareTo(BigDecimal.ZERO) < 0) {
+			response.setMessage("O valor da transação não pode ser negativa.");
+        	response.setType(messageType.ERRO);    	
+        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}
+    	
     	if(validaSeExisteId(id).equals(false)) {
     		response.setMessage("O Id informado:"+ id + " não existe");
         	response.setType(messageType.ERRO);    	
@@ -41,6 +47,8 @@ public class TransferirService {
         	response.setType(messageType.ERRO);    	
         	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
+    	
+    	
     	
     	if(verificaSaldo(id) == null) {  
     		response.setMessage("Saldo insuficiente. Saldo:0.00");

@@ -27,16 +27,25 @@ public class DepositoService {
         	response.setType(messageType.ERRO);    	
         	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
+		
+		if(deposito.compareTo(BigDecimal.ZERO) < 0) {
+			response.setMessage("O valor da transação não pode ser negativa.");
+        	response.setType(messageType.ERRO);    	
+        	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}
+		
 		if(validaSeExisteId(id).equals(false)) {
     		response.setMessage("O Id informado:"+ id + " não existe.");
         	response.setType(messageType.ERRO);    	
         	return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     	}
+		
 		if(verificaSaldo(id) != null){
     	cliente.setSaldo(verificaSaldo(id).add(deposito));
 		}else {
 			cliente.setSaldo(deposito);
 		}
+		
     	alteraSaldo(cliente, cliente.getSaldo(), id);
 		response.setMessage("Depósito realizado com sucesso. saldo:" + cliente.getSaldo() );
 		response.setType(messageType.SUCESSO);
