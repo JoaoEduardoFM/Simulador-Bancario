@@ -119,4 +119,14 @@ public class ClienteController{
 		OptionalDouble balancoSaldo = clienteService.MediaSaldoClientes();
 		return balancoSaldo;
 	}
+	
+	@GetMapping("/divisaoSaldos")
+	@ResponseBody
+	@ApiOperation(
+			value = "Divide os saldos baseados na quantidade de clientes Saldos/Clientes",
+			notes = "Divide saldos baseados na quantidade de clientes.")
+	public Double divisaodeSaldosCLientes() {
+		Double saldos = clienteService.divisaoSaldos();
+		return saldos;
+	}
 }

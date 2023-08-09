@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.function.ToDoubleFunction;
 
 import javax.validation.Valid;
 
@@ -96,7 +97,7 @@ public class ClienteService {
     
     public ResponseEntity<ResponseRest> salvarCliente(@Valid Cliente cliente,  @ApiIgnore ResponseRest response){
     	cliente.setFavorecido(null);
-    	cliente.setSaldo(null);
+    	cliente.setSaldo(BigDecimal.ZERO);
     	if(validaSeExisteId(cliente.getId())){
 			response.setMessage("Id já cadastrado.");
 	    	response.setType(messageType.ATENCAO);
@@ -149,5 +150,12 @@ public class ClienteService {
     	OptionalDouble soma =lista.stream().mapToDouble(value -> value.getSaldo().doubleValue()).average();
 		return soma;
     	
+    }
+    
+    public Double divisaoSaldos() {
+    	List<Cliente> clientes = listaCliente();
+    	Double balancoSaldoClientes = balancoSaldoClientes().doubleValue();
+    	balancoSaldoClientes= balancoSaldoClientes/clientes.size();
+    	return balancoSaldoClientes;
     }
 }
