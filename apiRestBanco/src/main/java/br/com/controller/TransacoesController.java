@@ -22,7 +22,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/transacoes")
-@Api( value = "Efetura transações bancárias", tags = { "Transações" })
+@Api( value = "Efetura transações bancárias", tags = { "Transações" }, description = " Transações bancárias.")
 public class TransacoesController {
 
 	@Autowired

@@ -29,7 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/cliente")
-@Api( value = "Conta Corrente", tags = { "Conta" })
+@Api( value = "Conta Corrente", tags = { "Conta" }, description = " CRUD para cadastro de cliente.")
 public class ClienteController{
 
     @Autowired
