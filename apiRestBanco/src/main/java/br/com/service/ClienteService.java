@@ -147,8 +147,8 @@ public class ClienteService {
     	List<Cliente> lista = new ArrayList<>();
     	List<Cliente> clientes = listaCliente();
     	lista.addAll(clientes);
-    	OptionalDouble soma =lista.stream().mapToDouble(value -> value.getSaldo().doubleValue()).average();
-		return soma;
+    	OptionalDouble media =lista.stream().mapToDouble(value -> value.getSaldo().doubleValue()).average();
+		return media;
     	
     }
     
