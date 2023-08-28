@@ -20,8 +20,8 @@ public class DesligarController {
 	ConfigurableWebApplicationContext context;
 
 	    @ApiOperation (
-	    		value = "Fechar aplicação",
-	    		notes = "Serviço que fecha a aplicação.")
+	    		value = "Desligar aplicação",
+	    		notes = "Serviço que desliga a aplicação.")
 	    @GetMapping("/desligar")
 	    public void shutdown() {
 	        TaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
