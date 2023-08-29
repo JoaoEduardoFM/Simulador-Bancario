@@ -43,6 +43,7 @@
 5) Efetua deposito.
 6) Efetua transferência entre contas.
 7) Adicionado Validation.
+8) Adicionado testes unítarios.
 
 ## Esses recursos estão em desenvolvimento:
 
