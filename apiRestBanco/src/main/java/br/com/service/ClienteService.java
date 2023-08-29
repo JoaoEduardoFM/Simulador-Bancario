@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.function.ToDoubleFunction;
 
 import javax.validation.Valid;
 
@@ -83,7 +82,6 @@ public class ClienteService {
 		response.setMessage("Registro excluído com sucesso");
 		response.setType(messageType.SUCESSO);
 		return new ResponseEntity<ResponseRest>(response, HttpStatus.OK);
-
 	}     
     
     public ResponseEntity<?> buscarClientePorId(@PathVariable("id") Long id, @ApiIgnore Cliente cliente, @ApiIgnore ResponseRest response) {
@@ -139,8 +137,7 @@ public class ClienteService {
     	List<Cliente> clientes = listaCliente();
     	lista.addAll(clientes);
     	Double soma =lista.stream().mapToDouble(value -> value.getSaldo().doubleValue()).sum();
-		return soma;
-    	
+		return soma;	
     }
     
     public OptionalDouble MediaSaldoClientes() {
@@ -149,7 +146,6 @@ public class ClienteService {
     	lista.addAll(clientes);
     	OptionalDouble media =lista.stream().mapToDouble(value -> value.getSaldo().doubleValue()).average();
 		return media;
-    	
     }
     
     public Double divisaoSaldos() {
