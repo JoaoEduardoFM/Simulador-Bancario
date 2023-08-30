@@ -10,9 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import br.com.entity.Cliente;
-import br.com.response.ResponseRest;
-import br.com.response.ResponseRest.messageType;
+import br.com.model.entity.Cliente;
+import br.com.model.response.ResponseRest;
+import br.com.model.response.ResponseRest.messageType;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Service

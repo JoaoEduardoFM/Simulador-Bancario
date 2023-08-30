@@ -9,9 +9,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import br.com.entity.Cliente;
-import br.com.response.ResponseRest;
-import br.com.response.ResponseRest.messageType;
+import br.com.model.entity.Cliente;
+import br.com.model.response.ResponseRest;
+import br.com.model.response.ResponseRest.messageType;
 import br.com.service.DepositoService;
 import br.com.service.SaqueService;
 import br.com.service.TransferirService;

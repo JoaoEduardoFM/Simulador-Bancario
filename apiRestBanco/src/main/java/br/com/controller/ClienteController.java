@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.entity.Cliente;
-import br.com.response.ResponseRest;
+import br.com.model.entity.Cliente;
+import br.com.model.response.ResponseRest;
 import br.com.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,9 +40,9 @@ public class ClienteController{
 	@ApiOperation (
 			value = "Cadastra uma conta corrente.",
 			notes = "cadastra um cliente vinculado a uma conta corrente.")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> salvar(@RequestBody @Valid Cliente cliente,  @ApiIgnore ResponseRest response){
-    	ResponseEntity<?> salvaCliente = clienteService.salvarCliente(cliente, response);
-    	return salvaCliente;
+    	return clienteService.salvarCliente(cliente, response);
     }
 
     @GetMapping
@@ -62,8 +62,7 @@ public class ClienteController{
 			notes = "Lista conta vinculadas a um Id.")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> buscarClientePorId(@PathVariable("id") Long id, @ApiIgnore Cliente cliente, @ApiIgnore ResponseRest response) {
-		ResponseEntity<?> buscaPorId = clienteService.buscarClientePorId(id, cliente, response);
-		return buscaPorId;
+		return clienteService.buscarClientePorId(id, cliente, response);
 	}
 
 	@DeleteMapping("/{id}")
@@ -72,19 +71,17 @@ public class ClienteController{
 			value = "Exclui conta.", 
 			notes = "Exclui uma conta vinculadas a um Id.")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public ResponseEntity<?> removerCliente(@PathVariable("id") Long id, @ApiIgnore Cliente cliente,
-			@ApiIgnore ResponseRest response) {
-		ResponseEntity<?> remover = clienteService.removerCliente(id, cliente, response);
-		return remover;
+	public ResponseEntity<?> removerCliente(@PathVariable("id") Long id, @ApiIgnore Cliente cliente, @ApiIgnore ResponseRest response) {
+		return clienteService.removerCliente(id, cliente, response);
 	}          
 
 	@PutMapping("/{id}")
 	@ApiOperation (
 		      value = "Atualizar conta.",
 		      notes = "Atualiza uma conta vinculadas a um Id.")
+	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> atualizarCliente(@PathVariable("id") Long id, @RequestBody @Valid Cliente cliente, @ApiIgnore ResponseRest response) {
-		ResponseEntity<?> atualiza = clienteService.atualizarCliente(id, cliente, response);
-		return atualiza;
+		return clienteService.atualizarCliente(id, cliente, response);
 	}
 	
 	@GetMapping("/saldo/{id}")
@@ -94,8 +91,7 @@ public class ClienteController{
 			notes = "Verifica saldo.")
 	@ResponseStatus(HttpStatus.OK)
 	public BigDecimal verificarSaldo(@PathVariable("id") Long id) {
-		BigDecimal verificaSaldo = clienteService.verificaSaldo(id);
-		return verificaSaldo;
+		return clienteService.verificaSaldo(id);
 	}
 	
 	@GetMapping("/balancoSaldos")
@@ -105,8 +101,7 @@ public class ClienteController{
 			notes = "Balanço saldo de clientes cadastrados.")
 	@ResponseStatus(HttpStatus.OK)
 	public Double balancoSaldoClientes() {
-		Double balancoSaldo = clienteService.balancoSaldoClientes();
-		return balancoSaldo;
+		return clienteService.balancoSaldoClientes();
 	}
 	
 	@GetMapping("/mediaSaldos")
@@ -116,8 +111,7 @@ public class ClienteController{
 			notes = "Média dos saldos de clientes cadastrados.")
 	@ResponseStatus(HttpStatus.OK)
 	public OptionalDouble MediaSaldoClientes() {
-		OptionalDouble balancoSaldo = clienteService.MediaSaldoClientes();
-		return balancoSaldo;
+		return clienteService.MediaSaldoClientes();
 	}
 	
 	@GetMapping("/divisaoSaldos")
@@ -125,8 +119,8 @@ public class ClienteController{
 	@ApiOperation(
 			value = "Divide os saldos baseados na quantidade de clientes Saldos/Clientes",
 			notes = "Divide saldos baseados na quantidade de clientes.")
+	@ResponseStatus(HttpStatus.OK)
 	public Double divisaodeSaldosCLientes() {
-		Double saldos = clienteService.divisaoSaldos();
-		return saldos;
+		return clienteService.divisaoSaldos();
 	}
 }

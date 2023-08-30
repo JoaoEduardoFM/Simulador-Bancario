@@ -15,10 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import br.com.entity.Cliente;
+import br.com.model.entity.Cliente;
+import br.com.model.response.ResponseRest;
+import br.com.model.response.ResponseRest.messageType;
 import br.com.repository.ClienteRepository;
-import br.com.response.ResponseRest;
-import br.com.response.ResponseRest.messageType;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Service
@@ -29,22 +29,6 @@ public class ClienteService {
     
     @Autowired
     private ModelMapper modelMapper;
-
-    public Cliente salvar(Cliente cliente){
-        return clienteRepository.save(cliente);
-    }
-
-    public List<Cliente> listaCliente(){
-        return clienteRepository.findAll();
-    }
-
-    public Optional<Cliente> buscarPorId(Long id){
-        return clienteRepository.findById(id);
-    }
-
-    public void removerPorId(Long id){
-        clienteRepository.deleteById(id);
-    }
     
     public ResponseEntity<?> RetornaSaldoDeBanco() {
     	  Iterable<Cliente> clientes = clienteRepository.findAll();
@@ -69,9 +53,7 @@ public class ClienteService {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
     
-    public ResponseEntity<?> removerCliente(@PathVariable("id") Long id, @ApiIgnore Cliente cliente,
-			@ApiIgnore ResponseRest response) {
-
+    public ResponseEntity<?> removerCliente(@PathVariable("id") Long id, @ApiIgnore Cliente cliente, @ApiIgnore ResponseRest response) {
 		if (!validaSeExisteId(cliente.getId())) {
 			response.setMessage("Id não existe.");
 			response.setType(messageType.ATENCAO);
@@ -85,7 +67,7 @@ public class ClienteService {
 	}     
     
     public ResponseEntity<?> buscarClientePorId(@PathVariable("id") Long id, @ApiIgnore Cliente cliente, @ApiIgnore ResponseRest response) {
-		if (!validaSeExisteId(cliente.getId())) {
+    	if (!validaSeExisteId(cliente.getId())) {
 			response.setMessage("Id não existe.");
 			response.setType(messageType.ATENCAO);
 			return new ResponseEntity<ResponseRest>(response, HttpStatus.BAD_REQUEST);
@@ -112,26 +94,6 @@ public class ClienteService {
     	return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
     
-    public Boolean validaSeExisteId(Long id) {
-		Optional<Cliente> buscaPorID = clienteRepository.findById(id);
-		try {
-		if(buscaPorID.get().getId() != null) {
-	     return true;
-		}
-		}catch(Exception e) {
-		return false;
-		}
-		return false;
-	}
-    
-    public BigDecimal verificaSaldo(Long id){
-		Optional<Cliente> cliente = buscarPorId(id);
-		if (cliente.isEmpty()) {
-			return null;
-		}
-		return cliente.get().getSaldo();
-    }
-    
     public Double balancoSaldoClientes() {
     	List<Cliente> lista = new ArrayList<>();
     	List<Cliente> clientes = listaCliente();
@@ -153,5 +115,37 @@ public class ClienteService {
     	Double balancoSaldoClientes = balancoSaldoClientes().doubleValue();
     	balancoSaldoClientes= balancoSaldoClientes/clientes.size();
     	return balancoSaldoClientes;
+    }
+    
+    public Boolean validaSeExisteId(Long id) {
+		Optional<Cliente> buscaPorID = clienteRepository.findById(id);
+		try {
+		if(buscaPorID.get().getId() != null) {
+	     return true;
+		}
+		}catch(Exception e) {
+		return false;
+		}
+		return false;
+	}
+    
+    public BigDecimal verificaSaldo(Long id){
+		Optional<Cliente> cliente = buscarPorId(id);
+		if (cliente.isEmpty()) {
+			return null;
+		}
+		return cliente.get().getSaldo();
+    }
+    
+    public Cliente salvar(Cliente cliente){
+        return clienteRepository.save(cliente);
+    }
+
+    public List<Cliente> listaCliente(){
+        return clienteRepository.findAll();
+    }
+
+    public Optional<Cliente> buscarPorId(Long id){
+        return clienteRepository.findById(id);
     }
 }

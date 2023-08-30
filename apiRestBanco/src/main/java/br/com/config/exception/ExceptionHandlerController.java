@@ -1,4 +1,4 @@
-package br.com.exception;
+package br.com.config.exception;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import br.com.response.ResponseRest;
+import br.com.model.response.ResponseRest;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {

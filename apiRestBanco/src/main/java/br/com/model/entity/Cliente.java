@@ -1,4 +1,4 @@
-package br.com.entity;
+package br.com.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

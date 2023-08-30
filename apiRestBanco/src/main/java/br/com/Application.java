@@ -1,7 +1,6 @@
 package br.com;
 
 import java.awt.Desktop;
-import java.io.Console;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
 @Slf4j
-public class ClienteApplication {
+public class Application {
 
 	@Bean
 	public ModelMapper modelMapper() {
@@ -28,7 +27,7 @@ public class ClienteApplication {
 		String swaggerUrl = "http://localhost:8080/swagger-ui.html#/";
 
 		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-			SpringApplication.run(ClienteApplication.class, args);
+			SpringApplication.run(Application.class, args);
 			Desktop.getDesktop().browse(new URI(swaggerUrl));
 			log.info("Aplicação iniciada.");
 

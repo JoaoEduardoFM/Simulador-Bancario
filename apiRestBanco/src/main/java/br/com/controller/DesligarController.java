@@ -1,13 +1,13 @@
 package br.com.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.ConfigurableWebApplicationContext;
 
+import br.com.service.DesligarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -17,17 +17,14 @@ import io.swagger.annotations.ApiOperation;
 public class DesligarController {
 
 	@Autowired
-	ConfigurableWebApplicationContext context;
+	DesligarService desligarService;
 
-	    @ApiOperation (
-	    		value = "Desligar aplicação",
-	    		notes = "Serviço que desliga a aplicação.")
-	    @GetMapping("/desligar")
-	    public void shutdown() {
-	        TaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
-	        taskExecutor.execute(() -> {
-	            context.close();
-	            System.exit(0);
-	        });
-	    }
+	@GetMapping("/desligar")
+	@ApiOperation(
+			value = "Desligar aplicação", 
+			notes = "Serviço que desliga a aplicação.")
+	@ResponseStatus(HttpStatus.OK)
+	public void shutdown() {
+		desligarService.shutdown();
+	}
 }

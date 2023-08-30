@@ -5,14 +5,16 @@ import java.math.BigDecimal;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.entity.Cliente;
-import br.com.response.ResponseRest;
+import br.com.model.entity.Cliente;
+import br.com.model.response.ResponseRest;
 import br.com.service.DepositoService;
 import br.com.service.SaqueService;
 import br.com.service.TransferirService;
@@ -39,6 +41,7 @@ public class TransacoesController {
 	@ApiOperation(
 			value = "Efetua saque.", 
 			notes = "Saca valor de conta corrente.")
+	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> sacaValor(
 			@ApiIgnore @Valid Cliente cliente, Long id, BigDecimal saque, @ApiIgnore ResponseRest response) {
 		ResponseEntity<?> sacarValor = saqueService.sacaValor(cliente, id, saque, response);
@@ -50,6 +53,7 @@ public class TransacoesController {
 	@ApiOperation (
 			value = "Deposita valor em conta.",
 			notes = "Deposita valor em conta vinculadas ao Id cadastrado.") 
+	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> depositaValor(Long id, BigDecimal deposito, @ApiIgnore @Valid Cliente cliente, @ApiIgnore ResponseRest response) {	
 		ResponseEntity<?> depositar = depositoService.depositaValor(id, deposito, cliente, response);
 		return depositar;
@@ -60,6 +64,7 @@ public class TransacoesController {
 	@ApiOperation(
 			value = "Transferir valor.", 
 			notes = "Trasnferir valor para outra conta corrente.")
+	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> tranferirValor(Long id, Long favorecido, BigDecimal saldo,
 			@ApiIgnore @Valid Cliente cliente, @ApiIgnore ResponseRest response) {
 		ResponseEntity<?> transferir = transferirService.tranferirValor(id, favorecido, saldo, cliente, response);
